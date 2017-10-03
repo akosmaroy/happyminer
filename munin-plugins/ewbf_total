@@ -1,0 +1,28 @@
+#!/usr/bin/python
+
+import sys
+import urllib2
+import json
+from pprint import pprint
+
+if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
+	print "graph_title EWBF mining speed"
+	print "graph_args -l 0"
+	print "graph_vlabel Sol/s"
+	print "graph_category mining"
+	print "graph_info EWBF ZEC mining performance"
+        print "total_speed_sps.info Computer complete mining speed"
+        print "total_speed_sps.label Whole Computer"
+	quit()
+
+stat = urllib2.urlopen("http://127.0.0.1:42000/getstat").read()
+data = json.loads(stat)
+
+total_speed_sps = 0
+
+for gpu in data['result']:
+	total_speed_sps += gpu['speed_sps']
+
+print "total_speed_sps.value %s" % (total_speed_sps)
+
+
