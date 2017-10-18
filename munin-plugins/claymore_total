@@ -8,11 +8,11 @@ from pprint import pprint
 if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
 	print "graph_title Claymore mining speed"
 	print "graph_args -l 0"
-	print "graph_vlabel MH/s"
+	print "graph_vlabel H/s"
 	print "graph_category mining"
 	print "graph_info Claymore ETH mining performance"
-        print "total_speed_mhps.info Computer complete mining speed"
-        print "total_speed_mhps.label Whole Computer"
+        print "total_speed_hps.info Computer complete mining speed"
+        print "total_speed_hps.label Whole Computer"
 	quit()
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM);
@@ -23,8 +23,8 @@ s.close();
 
 data = json.loads(response);
 
-total_speed_mhps = (float(data['result'][2].split(";")[0]) / 1000);
+total_speed_hps = float(data['result'][2].split(";")[0]);
 
-print "total_speed_mhps.value %s" % (total_speed_mhps)
+print "total_speed_mhps.value %s" % (total_speed_hps)
 
 
