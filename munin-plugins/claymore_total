@@ -25,6 +25,6 @@ data = json.loads(response);
 
 total_speed_hps = float(data['result'][2].split(";")[0]);
 
-print "total_speed_mhps.value %s" % (total_speed_hps)
+print "total_speed_hps.value %s" % (total_speed_hps)
 
 
