@@ -29,6 +29,6 @@ if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
 	quit()
 
 for gpu_id in range(0, len(per_gpu_data)):
-    print "speed_hps%s.value %s" % (gpu_id, float(per_gpu_data[gpu_id]))
+    print "speed_hps%s.value %s" % (gpu_id, float(per_gpu_data[gpu_id]) * 1000)
 
 

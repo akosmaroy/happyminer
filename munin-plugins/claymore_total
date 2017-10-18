@@ -23,7 +23,7 @@ s.close();
 
 data = json.loads(response);
 
-total_speed_hps = float(data['result'][2].split(";")[0]);
+total_speed_hps = float(data['result'][2].split(";")[0]) * 1000;
 
 print "total_speed_hps.value %s" % (total_speed_hps)
 
