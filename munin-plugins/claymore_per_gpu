@@ -17,7 +17,6 @@ per_gpu_data = data['result'][3].split(";");
 
 if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
 	print "graph_title Claymore mining speed per GPU"
-	print "graph_args -l 0"
 	print "graph_vlabel H/s"
 	print "graph_category mining"
 	print "graph_info Claymore ETH mining performance per GPU"
