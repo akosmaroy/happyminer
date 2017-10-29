@@ -1,0 +1,53 @@
+#!/usr/bin/python
+
+#
+#  create a symlink to this munin plugin, that ends with the name of the
+#  algorithm you want to monitor. e.g. to monitor equihash, create:
+#  ln -s /usr/share/munin/plugins/ccminer_total_ ccminer_total_equihash
+#
+#  to create a number of links at the same time, do:
+#
+#  for TARGET in ccminer_total_{cryptonight,equihash,groestl,lyra2v2,myr-gr,neoscrypt,skein} ; do ln -s /usr/share/munin/plugins/ccminer_total_ $TARGET; done
+#
+
+import os
+import sys
+import socket
+from pprint import pprint
+
+basename = os.path.basename(sys.argv[0])
+
+requested_algo = os.path.basename(sys.argv[0]).split('_')[-1];
+
+if not requested_algo :
+    quit(0);
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(("localhost", 4068))
+s.send("summary")
+data_str = s.recv(1024)
+s.close
+
+data = {};
+for part in data_str.split(';') :
+    parts = part.split('=')
+    if (len(parts) > 1) :
+        data[parts[0]] = parts[1];
+
+reported_algo = data['ALGO'];
+
+if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
+	print "graph_title ccminer mining speed for %s" % (requested_algo)
+	print "graph_vlabel H/s"
+	print "graph_category mining"
+	print "graph_info ccminer mining performance for %s" % (requested_algo)
+        print "total_speed_hps.info Computer complete mining speed"
+        print "total_speed_hps.label Whole Computer"
+	quit()
+
+total_speed_hps = float(data['KHS']) * 1000;
+
+if (requested_algo.lower().endswith(reported_algo.lower())) :
+    print "total_speed_hps.value %s" % (total_speed_hps)
+
+
