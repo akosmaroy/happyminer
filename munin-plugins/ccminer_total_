@@ -23,7 +23,20 @@ if not requested_algo :
     quit(0);
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(("localhost", 4068))
+
+try:
+    s.connect(("localhost", 4068))
+except socket.error, exc:
+    if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
+            print "graph_title ccminer mining speed for %s" % (requested_algo)
+            print "graph_vlabel H/s"
+            print "graph_category mining"
+            print "graph_info ccminer mining performance for %s" % (requested_algo)
+            print "total_speed_hps.info Computer complete mining speed"
+            print "total_speed_hps.label Whole Computer"
+    quit(0)
+
+
 s.send("summary")
 data_str = s.recv(1024)
 s.close
