@@ -1,0 +1,45 @@
+#!/usr/bin/python
+
+import os
+import sys
+import urllib2
+import json
+from pprint import pprint
+
+api_key = 'XXX'
+
+
+if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
+	print "graph_title pool.bitcoin.com average hash rate"
+	print "graph_vlabel Hash / s"
+	print "graph_category mining"
+	print "graph_info average hash rate in the last 10 minutes on pool.bitcoin.com"
+        print "hashrateAverage10min.info average hash rate in the last 10 minutes"
+        print "hashrateAverage10min.label H/s"
+	quit()
+
+
+
+# https://console.pool.bitcoin.com/srv/api/user?apikey=XXX
+
+url_base = 'https://console.pool.bitcoin.com/srv/api/user?apikey=' + api_key;
+
+hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
+       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+       'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+       'Accept-Encoding': 'none',
+       'Accept-Language': 'en-US,en;q=0.8',
+       'Connection': 'keep-alive'}
+
+req = urllib2.Request(url_base, headers=hdr)
+resp = urllib2.urlopen(req)
+stat = resp.read()
+data = json.loads(stat)
+
+
+hashrateAverage10minTerahashes = float(data['hashrateAverage10minTerahashes'])
+hashrateAverage10min = hashrateAverage10minTerahashes * 1000000000000;
+
+print "hashrateAverage10min.value %s" % (hashrateAverage10min)
+
+
