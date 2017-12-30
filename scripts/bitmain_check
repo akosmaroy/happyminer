@@ -1,0 +1,54 @@
+#!/usr/bin/python
+
+import os
+import sys
+import urllib2
+from lxml import etree
+from pprint import pprint
+
+product_string = "S9";
+
+if (len(sys.argv) > 1) :
+        product_string = sys.argv[1];
+
+
+url = 'https://shop.bitmain.com/';
+
+hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
+       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+       'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+       'Accept-Encoding': 'none',
+       'Accept-Language': 'en-US,en;q=0.8',
+       'Connection': 'keep-alive'}
+
+req = urllib2.Request(url, headers=hdr)
+resp = urllib2.urlopen(req)
+page = resp.read()
+
+#print "page: %s" % page
+
+tree = etree.HTML(page);
+
+# find the product string that we're looking for
+product_names = tree.xpath("//div[contains(@class, 'goodsDescrip')]/h2/text()[contains(., '" + product_string + "')]/..");
+if (len(product_names) == 0) :
+        print "product %s not found, exiting..." % product_string;
+        quit(1);
+
+for product_name in product_names :
+
+    # find the element that describes this product
+    product = product_name.xpath("./../..");
+    # find the order button
+    order_button = product[0].xpath(".//button");
+    price = product[0].xpath(".//div[contains(@class, 'currency-USD')]");
+
+
+    if order_button[1].get('class') == "sold" :
+            available_string = "sold out";
+    else :
+            available_string = "available";
+
+
+    print "%s for %s is %s" % (product_name.text, price[0].text.encode('utf-8'), available_string);
+
