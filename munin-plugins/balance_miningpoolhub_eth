@@ -28,19 +28,19 @@ hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML,
 
 
 if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
-	print "graph_title current BTC balance on miningpoolhub in USD"
+	print "graph_title current ETH balance on miningpoolhub in USD"
 	print "graph_vlabel USD"
 	print "graph_category mining"
 	print "graph_printf %#.4lf"
 	print "graph_scale no"
 	print "graph_args --left-axis-format %#.3lf"
-	print "graph_info current BTC balance on litecoinpool in USD"
-        print "balance.info current BTC balance on litecoinpool in USD"
+	print "graph_info current ETH balance on litecoinpool in USD"
+        print "balance.info current ETH balance on litecoinpool in USD"
         print "balance.label balance"
 	quit()
 
 
-# get the current BTC balance from miningpoolhub
+# get the current ETH balance from miningpoolhub
 
 req = urllib2.Request(miningpoolhub_url, headers=hdr)
 resp = urllib2.urlopen(req)
@@ -51,7 +51,7 @@ data = json.loads(stat)
 current_balance = float(data['getdashboarddata']['data']['balance']['confirmed'])
 
 
-# get the price of BTC from bittrex
+# get the price of ETH from bittrex
 
 req = urllib2.Request(bittrex_url, headers=hdr)
 resp = urllib2.urlopen(req)
