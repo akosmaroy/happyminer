@@ -1,0 +1,48 @@
+#!/usr/bin/python
+
+import os
+import sys
+import urllib2
+import json
+from pprint import pprint
+
+requested_coin = os.path.basename(sys.argv[0]).split('_')[-1];
+
+# https://www.litecoinpool.org/api?api_key=XXX
+
+api_key = 'XXX';
+url_base = 'https://www.litecoinpool.org/api?&api_key=' + api_key;
+
+hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
+       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+       'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+       'Accept-Encoding': 'none',
+       'Accept-Language': 'en-US,en;q=0.8',
+       'Connection': 'keep-alive'}
+
+
+if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
+	print "graph_title last 24 hours of LTC on litecoinpool"
+	print "graph_vlabel LTC"
+	print "graph_category mining"
+	print "graph_printf %#.4lf"
+	print "graph_scale no"
+	print "graph_args --left-axis-format %#.3lf"
+	print "graph_info last 24 hours of LTC on litecoinpool"
+        print "recent_credits_24hours.info Credits in the last 24 hours"
+        print "recent_credits_24hours.label Amount"
+	quit()
+
+
+req = urllib2.Request(url_base, headers=hdr)
+resp = urllib2.urlopen(req)
+stat = resp.read()
+data = json.loads(stat)
+
+
+
+recent_credits_24hours = float(data['user']['expected_24h_rewards'])
+
+print "recent_credits_24hours.value %s" % (recent_credits_24hours)
+
+
