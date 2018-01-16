@@ -13,14 +13,14 @@ bittrex_url = 'https://bittrex.com/Api/v2.0/pub/market/GetLatestTick?marketName=
 
 
 if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
-	print "graph_title current BTC balance on pool.bitcoin.com in USD"
+	print "graph_title current BCC balance on pool.bitcoin.com in USD"
 	print "graph_vlabel USD"
 	print "graph_category mining"
 	print "graph_printf %#.4lf"
 	print "graph_scale no"
 	print "graph_args --left-axis-format %#.3lf"
-	print "graph_info current BTC balance on pool.bitcoin.com in USD"
-        print "balance.info current BTC balance on pool.bitcoin.com in USD"
+	print "graph_info current BCC balance on pool.bitcoin.com in USD"
+        print "balance.info current BCC balance on pool.bitcoin.com in USD"
         print "balance.label balance"
 	quit()
 
@@ -38,7 +38,7 @@ hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML,
        'Connection': 'keep-alive'}
 
 
-# get the BTC balance from the pool
+# get the BCC balance from the pool
 
 req = urllib2.Request(pool_url, headers=hdr)
 resp = urllib2.urlopen(req)
@@ -48,7 +48,7 @@ data = json.loads(stat)
 current_balance = float(data['bitcoinCashBalance'])
 
 
-# get the price of BTC from bittrex
+# get the price of BCC from bittrex
 
 req = urllib2.Request(bittrex_url, headers=hdr)
 resp = urllib2.urlopen(req)
