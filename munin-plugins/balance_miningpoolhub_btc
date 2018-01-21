@@ -30,7 +30,7 @@ hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML,
 if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
 	print "graph_title current BTC balance on miningpoolhub in USD"
 	print "graph_vlabel USD"
-	print "graph_category mining"
+	print "graph_category accounting"
 	print "graph_printf %#.4lf"
 	print "graph_scale no"
 	print "graph_args --left-axis-format %#.3lf"

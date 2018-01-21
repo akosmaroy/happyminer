@@ -15,7 +15,7 @@ rrd_base_path = "/var/lib/munin/XXX/YYY.ZZZ-" + plugin_field_data + "-g.rrd"
 if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
 	print "graph_title change since yesterday for %s" % (plugin_field_data)
 	print "graph_vlabel USD"
-	print "graph_category mining"
+	print "graph_category accounting"
 	print "graph_printf %#.4lf"
 	print "graph_scale no"
 	print "graph_args --left-axis-format %#.3lf"
