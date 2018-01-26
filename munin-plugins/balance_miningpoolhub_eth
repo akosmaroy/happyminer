@@ -34,8 +34,8 @@ if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
 	print "graph_printf %#.4lf"
 	print "graph_scale no"
 	print "graph_args --left-axis-format %#.3lf"
-	print "graph_info current ETH balance on litecoinpool in USD"
-        print "balance.info current ETH balance on litecoinpool in USD"
+	print "graph_info current ETH balance on miningpoolhub in USD"
+        print "balance.info current ETH balance on miningpoolhub in USD"
         print "balance.label balance"
 	quit()
 

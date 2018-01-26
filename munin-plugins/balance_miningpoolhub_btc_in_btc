@@ -16,8 +16,6 @@ action = 'getdashboarddata'
 
 miningpoolhub_url = 'https://' + coin_name + '.miningpoolhub.com/index.php?page=api' + '&action=' + action + '&api_key=' + api_key + '&id=' + user_id;
 
-bittrex_url = 'https://bittrex.com/Api/v2.0/pub/market/GetLatestTick?marketName=USDT-BTC&tickInterval=thirtyMin&_' + str(time.time())
-
 
 hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -28,14 +26,14 @@ hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML,
 
 
 if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
-	print "graph_title current BTC balance on miningpoolhub in USD"
-	print "graph_vlabel USD"
+	print "graph_title current BTC balance on miningpoolhub in BTC"
+	print "graph_vlabel BTC"
 	print "graph_category accounting"
 	print "graph_printf %#.4lf"
 	print "graph_scale no"
 	print "graph_args --left-axis-format %#.3lf"
-	print "graph_info current BTC balance on miningpoolhub in USD"
-        print "balance.info current BTC balance on miningpoolhub in USD"
+	print "graph_info current BTC balance on miningpoolhub in BTC"
+        print "balance.info current BTC balance on miningpoolhub in BTC"
         print "balance.label balance"
 	quit()
 
@@ -51,17 +49,7 @@ data = json.loads(stat)
 current_balance = float(data['getdashboarddata']['data']['balance']['confirmed'])
 
 
-# get the price of BTC from bittrex
-
-req = urllib2.Request(bittrex_url, headers=hdr)
-resp = urllib2.urlopen(req)
-stat = resp.read()
-data = json.loads(stat)
-
-btc_usd = float(data['result'][0]['C'])
-
-
 # print the result
 
-print "balance.value %s" % (current_balance * btc_usd)
+print "balance.value %s" % (current_balance)
 
