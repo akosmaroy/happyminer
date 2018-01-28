@@ -33,8 +33,6 @@ result = rrdtool.fetch(rrd_base_path, "LAST", "-a", "-r", "5m", "-s", "-1d", "-e
 rows = result[2]
 value_one_day_ago = rows[0][0];
 
-print value_one_day_ago;
-
 # get the value for now / last measured
 
 result = rrdtool.fetch(rrd_base_path, "LAST", "-a", "-r", "5m", "-s", "-10m", "-e", "-10m");
@@ -42,8 +40,6 @@ result = rrdtool.fetch(rrd_base_path, "LAST", "-a", "-r", "5m", "-s", "-10m", "-
 #ds = result[1]
 rows = result[2]
 value_now = rows[0][0];
-
-print value_now;
 
 print "change_since_yesterday.value %s" % (float(value_now - value_one_day_ago));
 
