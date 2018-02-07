@@ -4,14 +4,19 @@ import os
 import sys
 import time
 import hashlib
+import hmac
 import urllib2
 import json
 from pprint import pprint
 
-# http://sia.luxor.tech/api/user/XXX
+# https://antpool.com/api/account.htm?key=XXX&nonce=YYY&signature=ZZZ&coin=COIN
 
-sia_address = 'XXX'
+user_id = 'XXX'
+api_key = 'YYY'
+secret_key = 'ZZZ'
+coin_name = 'SC'
 nonce = str(time.time())
+
 
 hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -22,33 +27,32 @@ hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML,
 
 
 if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
-	print "graph_title current SC balance on luxor in USD"
+	print "graph_title current SC balance on antpool in USD"
 	print "graph_vlabel USD"
 	print "graph_category accounting"
 	print "graph_printf %#.4lf"
 	print "graph_scale no"
 	print "graph_args --left-axis-format %#.3lf"
-	print "graph_info current SC balance on luxor in USD"
-        print "balance.info current SC balance on luxor in USD"
+	print "graph_info current SC balance on antpool in USD"
+        print "balance.info current SC balance on antpool in USD"
         print "balance.label balance"
 	quit()
 
 
-# get the current SC balance from luxor
+# get the current SC balance from antpool
 
-luxor_url = 'http://sia.luxor.tech/api/user/' + sia_address
+message = user_id + api_key + nonce
+signature = hmac.new(secret_key, msg=message, digestmod=hashlib.sha256).hexdigest().upper()
+
+antpool_url = 'https://antpool.com/api/account.htm?key=' + api_key + '&nonce=' + nonce + '&signature=' + signature + '&coin=' + coin_name;
 
 
-req = urllib2.Request(luxor_url, headers=hdr)
+req = urllib2.Request(antpool_url, headers=hdr)
 resp = urllib2.urlopen(req)
 stat = resp.read()
 data = json.loads(stat)
 
-# for some reason the balance is provided with an 1e+24 multiplier
-
-current_balance = float(data['balance']) / 1e+24
-
-print current_balance
+current_balance = float(data['data']['balance'])
 
 
 # get the price of SC from bittrex in BTC
