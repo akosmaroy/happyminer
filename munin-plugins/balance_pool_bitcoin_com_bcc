@@ -55,10 +55,10 @@ resp = urllib2.urlopen(req)
 stat = resp.read()
 data = json.loads(stat)
 
-btc_usd = float(data['result'][0]['C'])
+bch_usd = float(data['result'][0]['C'])
 
 
 # print the result
 
-print "balance.value %s" % (current_balance * btc_usd)
+print "balance.value %s" % (current_balance * bch_usd)
 
