@@ -15,7 +15,7 @@ api_secret = 'XXX'
 
 blocktrail_url = 'https://api.blocktrail.com/v1/bcc/address/' + bcc_address + '?api_key=' + api_key
 
-bittrex_url = 'https://bittrex.com/Api/v2.0/pub/market/GetLatestTick?marketName=USDT-BCC&tickInterval=thirtyMin&_' + str(time.time())
+bittrex_url = 'https://bittrex.com/Api/v2.0/pub/market/GetLatestTick?marketName=USDT-BCH&tickInterval=thirtyMin&_' + str(time.time())
 
 
 hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
