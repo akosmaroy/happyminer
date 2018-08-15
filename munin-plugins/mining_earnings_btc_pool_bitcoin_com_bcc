@@ -1,0 +1,64 @@
+#!/usr/bin/python
+
+import os
+import sys
+import time
+from pprint import pprint
+import urllib2
+import json
+import rrdtool
+
+plugin_field_data = 'balance_native_pool_bitcoin_com_bcc-balance'
+
+#rrd_base_path = "/var/lib/munin/XXX/YYY.ZZZ-" + plugin_field_data + "-g.rrd"
+rrd_base_path = "/var/lib/munin/HappyMiner/HappyMiner01.HappyMiner-" + plugin_field_data + "-g.rrd"
+
+bittrex_url = 'https://bittrex.com/Api/v2.0/pub/market/GetLatestTick?marketName=BTC-BCH&tickInterval=thirtyMin&_' + str(time.time())
+
+
+if (len(sys.argv) > 1) and (sys.argv[1] == "config") :
+	print "graph_title mining earning in BTC for the last day for %s" % (plugin_field_data)
+	print "graph_vlabel BTC"
+	print "graph_category accounting"
+	print "graph_printf %#.4lf"
+	print "graph_scale no"
+	print "graph_args --left-axis-format %#.3lf"
+	print "graph_info mining earning in BTC for the last day for %s" % (plugin_field_data)
+        print "earnings.info mining earning in BTC for the last day for %s" % (plugin_field_data)
+        print "earnings.label earnings"
+	quit()
+
+
+# get the value from 1 day ago
+
+result = rrdtool.fetch(rrd_base_path, "LAST", "-a", "-r", "5m", "-s", "-1d", "-e", "-1d");
+#start, end, step = result[0]
+#ds = result[1]
+rows = result[2]
+value_one_day_ago = rows[0][0];
+
+# get the value for now / last measured
+
+result = rrdtool.fetch(rrd_base_path, "LAST", "-a", "-r", "5m", "-s", "-10m", "-e", "-10m");
+#start, end, step = result[0]
+#ds = result[1]
+rows = result[2]
+value_now = rows[0][0];
+
+mining_earnings_native = float(value_now - value_one_day_ago);
+
+
+# get the price of BCH from bittrex
+
+req = urllib2.Request(bittrex_url)
+resp = urllib2.urlopen(req)
+stat = resp.read()
+data = json.loads(stat)
+
+btc_bcc = float(data['result'][0]['C'])
+
+
+# print the result
+
+print "earnings.value %s" % (mining_earnings_native * btc_bcc)
+
